@@ -262,5 +262,7 @@ if __name__ == '__main__':
     x = [3,4,5,6,7]
     y = [10, 3, 34, 21, 12]
     z = [11, 19, 16, 8, 19]
-    plot(x, 'ACC', y, 'DP (mixed)', z, 'EO (mixed)', 'Performance metrics', fig_name+'_trial')
+    fig_name2 = args.dataset + '_trial.jpg'
+    
+    plot(x, 'ACC', y, 'DP (mixed)', z, 'EO (mixed)', 'Performance metrics', fig_name2)
     
