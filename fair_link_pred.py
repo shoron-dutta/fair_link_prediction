@@ -185,17 +185,11 @@ if __name__ == '__main__':
             y_padded = torch.zeros(logit_arr.shape)
             y_padded[:Y.shape[0]] = Y
             # print(f'type(y_padded): {type(y_padded)}')
-            kernel_logits = get_kernel_mat(logit_arr, logit_arr)
-            kernel_sensitive = get_kernel_mat(y_padded, y_padded)
-            #print("Computed kernel mat")
-            # print(f'kernel_logits: {type(kernel_logits)}, kernel_sensitive: {type(kernel_sensitive)}')
             
-            normalized_kernel_logits = get_normalized_kernel_mat(kernel_logits)
-            normalized_kernel_sensitive = get_normalized_kernel_mat(kernel_sensitive)
             
             # print(f'normalized_kernel_logits: {type(normalized_kernel_logits)}, normalized_kernel_sensitive: {type(normalized_kernel_sensitive)}')
             #print("Computed normalized kernel mat")
-            mutual_info = get_mutual_info(normalized_kernel_logits, normalized_kernel_sensitive, alpha)
+            mutual_info = get_mutual_info(logit_arr, y_padded, alpha)
             #print("Computed mutual info")
 
 
