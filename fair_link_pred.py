@@ -181,9 +181,9 @@ if __name__ == '__main__':
             # mutual info
             logit_arr = link_logits
             labels_arr = tr_labels
-            print(f'{type(Y), type(logit_arr), type(logit_arr.shape), type(Y.shape)}')
+            print(f'{type(Y), type(logit_arr), logit_arr.shape, Y.shape}')
             y_padded = torch.zeros(logit_arr.shape)
-            y_padded[:Y.shape] = Y
+            y_padded[:Y.shape[0]] = Y
 
             kernel_logits = get_kernel_mat(logit_arr, logit_arr)
             kernel_sensitive = get_kernel_mat(y_padded, y_padded)
