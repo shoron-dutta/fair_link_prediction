@@ -19,6 +19,7 @@ from entropy import get_kernel_mat, get_normalized_kernel_mat, get_mutual_info
 from utils import (
     get_link_labels,
     prediction_fairness,
+    plot
 )
 
 from torch_geometric.utils import train_test_split_edges
@@ -113,7 +114,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Fair link prediction using regularized mutual information')
     parser.add_argument('--dataset', type=str, default='cora', help='name of the dataset: citeseer, pubmed, cora')
     parser.add_argument('--num_epochs', type=int, default=2, help='number of epochs')
-    parser.add_argument('--reg_lambda', type=float, default=0.7, help='regularization parameter')
     parser.add_argument('--alpha', type=float, default=0.5, help='alpha parameter for entropy')
     args = parser.parse_args()
 
@@ -121,7 +121,10 @@ if __name__ == '__main__':
     path = osp.join(osp.dirname(osp.realpath('__file__')), "..", "data", dataset)
     dataset = Planetoid(path, dataset, transform=T.NormalizeFeatures())
 
-    test_seeds = [0,1,2,3,4,5]
+    random_seed = 0
+    acc_per_lambda = []
+    dp_mix_per_lambda = []
+    eo_mix_per_lambda = []
     # test_seeds = [0]
     acc_auc = []
     fairness = []
@@ -129,8 +132,9 @@ if __name__ == '__main__':
 
     delta = 0.16 # when set to 0, it applies no fairness constraint
     alpha = args.alpha
-    reg_lambda = args.reg_lambda
-    for random_seed in test_seeds:
+    reg_lambda_set = [0, 0.2, 0.4, 0.6, 0.8, 1]
+    for reg_lambda in reg_lambda_set:
+    #for random_seed in test_seeds:
 
         np.random.seed(random_seed)
         data = dataset[0]
@@ -241,19 +245,13 @@ if __name__ == '__main__':
         fairness.append([x * 100 for x in f])
 
 
+        # since, we're using only one seed, mean is unnecessary but harmless, change later
+        ma = np.mean(np.asarray(acc_auc), axis=0)
+        mf = np.mean(np.asarray(fairness), axis=0)
 
-    ma = np.mean(np.asarray(acc_auc), axis=0)
-    mf = np.mean(np.asarray(fairness), axis=0)
+        acc_per_lambda.append(ma[0])
+        dp_mix_per_lambda.append(mf[0])
+        eo_mix_per_lambda.append(mf[1])
 
-    sa = np.std(np.asarray(acc_auc), axis=0)
-    sf = np.std(np.asarray(fairness), axis=0)
-
-    print(f"ACC: {ma[0]:2f} +- {sa[0]:2f}")
-    print(f"AUC: {ma[1]:2f} +- {sa[1]:2f}")
-
-    print(f"DP mix: {mf[0]:2f} +- {sf[0]:2f}")
-    print(f"EoP mix: {mf[1]:2f} +- {sf[1]:2f}")
-    print(f"DP group: {mf[2]:2f} +- {sf[2]:2f}")
-    print(f"EoP group: {mf[3]:2f} +- {sf[3]:2f}")
-    print(f"DP sub: {mf[4]:2f} +- {sf[4]:2f}")
-    print(f"EoP sub: {mf[5]:2f} +- {sf[5]:2f}")
+    fig_name = dataset + '_ablation.jpg'
+    plot(acc_per_lambda, 'ACC', dp_mix_per_lambda, 'DP (mixed)', eo_mix_per_lambda, 'EO (mixed)', 'Performance metrics', fig_name):
