@@ -164,12 +164,10 @@ if __name__ == '__main__':
                 num_nodes=N,
                 num_neg_samples=data.train_pos_edge_index.size(1) // 2,
             ).to(device)
-            print(f'type(neg_edges_tr): {type(data.train_pos_edge_index)}')
-            print(f'(neg_edges_tr): {(data.train_pos_edge_index.shape)}, {data.train_pos_edge_index[:15]}')
-
-            if epoch == 1 or epoch % 10 == 0:
-                keep = torch.where(randomization[epoch], Y_aux, ~Y_aux)
-
+            print(f'type(data.train_pos_edge_index): {type(data.train_pos_edge_index)}')
+            print(f'(train_pos_edge_index): {(data.train_pos_edge_index.shape)}, {data.train_pos_edge_index[:15]}')
+            print(f'data.x: {data.x.shape}, {data.Y.shape}')
+            
             model.train()
             optimizer.zero_grad()
 
