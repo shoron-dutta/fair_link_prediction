@@ -182,7 +182,8 @@ if __name__ == '__main__':
             
             sens =torch.empty(data.train_pos_edge_index.shape[1], 2)
             for i in range(data.train_pos_edge_index.shape[1]):
-                sens[i] = protected_attribute[:i]
+                x, y = data.train_pos_edge_index[0][i], data.train_pos_edge_index[1][y]
+                sens[0] = [protected_attribute[x], protected_attribute[y]]
             print(f'sens: {sens.shape}')
 
             print(f'link_logits: {link_logits.shape}')
