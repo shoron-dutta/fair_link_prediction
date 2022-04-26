@@ -186,6 +186,14 @@ if __name__ == '__main__':
                 sens[i][0], sens[i][1] = protected_attribute[src], protected_attribute[tgt]
             print(f'sens: {sens.shape}')
 
+            sens2 =torch.empty(neg_edges_tr.shape[1], 2)
+            for i in range(neg_edges_tr.shape[1]):
+                src, tgt = neg_edges_tr[0][i], neg_edges_tr[1][i]
+                sens2[i][0], sens2[i][1] = protected_attribute[src], protected_attribute[tgt]
+            print(f'sens2: {sens2.shape}')
+
+            print(f'sum: {sens.shape.item()+sens2.shape.item()}')
+
             print(f'link_logits: {link_logits.shape}')
             
             # mutual info
