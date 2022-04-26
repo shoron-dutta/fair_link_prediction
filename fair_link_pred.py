@@ -191,7 +191,7 @@ if __name__ == '__main__':
             # mutual info
             logit_arr = link_logits
             labels_arr = tr_labels
-            print(f'{type(Y), type(logit_arr)}, logit_arr.shape: {logit_arr.shape}, {Y.shape}')
+            print(f'{type(Y), type(logit_arr)}, logit_arr.shape: {logit_arr.shape}, {Y.shape}, {tr_labels.shape}')
             y_padded = torch.zeros(logit_arr.shape)
             y_padded[:Y.shape[0]] = Y
             # print(f'type(y_padded): {type(y_padded)}')
