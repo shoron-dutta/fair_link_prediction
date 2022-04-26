@@ -19,7 +19,7 @@ from entropy import get_kernel_mat, get_normalized_kernel_mat, get_mutual_info
 from utils import (
     get_link_labels,
     prediction_fairness,
-    plot
+    plot1, plot2
 )
 
 from torch_geometric.utils import train_test_split_edges
