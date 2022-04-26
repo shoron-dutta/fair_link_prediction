@@ -138,7 +138,7 @@ if __name__ == '__main__':
         data.train_mask = data.val_mask = data.test_mask = data.y = None
         data = train_test_split_edges(data, val_ratio=0.1, test_ratio=0.2)
         data = data.to(device)
-        print(type(data))
+        #print(type(data))
 
         num_classes = len(np.unique(protected_attribute))
         N = data.num_nodes
@@ -203,10 +203,6 @@ if __name__ == '__main__':
             # mutual info
             logit_arr = link_logits
             labels_arr = tr_labels
-            # print(f'{type(Y), type(logit_arr)}, logit_arr.shape: {logit_arr.shape}, {Y.shape}, {tr_labels.shape}')
-            y_padded = torch.zeros(logit_arr.shape)
-            y_padded[:Y.shape[0]] = Y
-            # print(f'type(y_padded): {type(y_padded)}')
             
             
             # print(f'normalized_kernel_logits: {type(normalized_kernel_logits)}, normalized_kernel_sensitive: {type(normalized_kernel_sensitive)}')

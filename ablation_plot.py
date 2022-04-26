@@ -117,7 +117,7 @@ if __name__ == '__main__':
     parser.add_argument('--alpha', type=float, default=0.5, help='alpha parameter for entropy')
     args = parser.parse_args()
 
-    dataset = "cora" #"citeseer" #"cora" "pubmed"
+    dataset = args.dataset #"citeseer" #"cora" "pubmed"
     path = osp.join(osp.dirname(osp.realpath('__file__')), "..", "data", dataset)
     dataset = Planetoid(path, dataset, transform=T.NormalizeFeatures())
 
@@ -184,19 +184,30 @@ if __name__ == '__main__':
             tr_labels = get_link_labels(
                 data.train_pos_edge_index[:, keep], neg_edges_tr
             ).to(device)
+
+            sens =torch.empty(data.train_pos_edge_index.shape[1], 2)
+            for i in range(data.train_pos_edge_index.shape[1]):
+                src, tgt = data.train_pos_edge_index[0][i], data.train_pos_edge_index[1][i]
+                sens[i][0], sens[i][1] = protected_attribute[src], protected_attribute[tgt]
+            # print(f'sens: {sens.shape}')
+
+            sens2 =torch.empty(neg_edges_tr.shape[1], 2)
+            for i in range(neg_edges_tr.shape[1]):
+                src, tgt = neg_edges_tr[0][i], neg_edges_tr[1][i]
+                sens2[i][0], sens2[i][1] = protected_attribute[src], protected_attribute[tgt]
+            # print(f'sens2: {sens2.shape}')
+            final_vals = torch.cat((sens, sens2), dim=0) # src and tgt class label for all edges, pos followed by neg
+            
             
             # mutual info
             logit_arr = link_logits
             labels_arr = tr_labels
-            # print(f'{type(Y), type(logit_arr), logit_arr.shape, Y.shape}')
-            y_padded = torch.zeros(logit_arr.shape)
-            y_padded[:Y.shape[0]] = Y
-            # print(f'type(y_padded): {type(y_padded)}')
+        
             
             
             # print(f'normalized_kernel_logits: {type(normalized_kernel_logits)}, normalized_kernel_sensitive: {type(normalized_kernel_sensitive)}')
             #print("Computed normalized kernel mat")
-            mutual_info = get_mutual_info(logit_arr, y_padded, alpha)
+            mutual_info = get_mutual_info(logit_arr, final_vals, alpha)
             #print("Computed mutual info")
 
 
