@@ -32,8 +32,10 @@ def fair_metrics(gt, y, group):
 
 def get_link_labels(pos_edge_index, neg_edge_index):
     E = pos_edge_index.size(1) + neg_edge_index.size(1)
+    print(f"E: {E}")
     link_labels = torch.zeros(E, dtype=torch.float)
     link_labels[: pos_edge_index.size(1)] = 1.0
+    print(f"link lab: {link_labels}")
     return link_labels
 
 def prediction_fairness(test_edge_idx, test_edge_labels, te_y, group):
@@ -192,7 +194,7 @@ if __name__ == '__main__':
                 sens2[i][0], sens2[i][1] = protected_attribute[src], protected_attribute[tgt]
             print(f'sens2: {sens2.shape}')
 
-            print(f'sum: {sens.shape.item()+sens2.shape.item()}')
+            print(f'sum: {sens.shape[0]+sens2.shape[0]}')
 
             print(f'link_logits: {link_logits.shape}')
             
