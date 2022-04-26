@@ -166,7 +166,7 @@ if __name__ == '__main__':
             ).to(device)
             print(f'type(data.train_pos_edge_index): {type(data.train_pos_edge_index)}')
             print(f'(train_pos_edge_index): {(data.train_pos_edge_index.shape)}, {data.train_pos_edge_index[:15]}')
-            print(f'data.x: {data.x.shape}, {data.Y.shape}')
+            print(f'data.x: {data.x.shape}, {data.y}')
             
             model.train()
             optimizer.zero_grad()
