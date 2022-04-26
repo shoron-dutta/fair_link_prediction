@@ -164,6 +164,7 @@ if __name__ == '__main__':
                 num_nodes=N,
                 num_neg_samples=data.train_pos_edge_index.size(1) // 2,
             ).to(device)
+            print(f'type(neg_edges_tr): {type(neg_edges_tr)}')
 
             if epoch == 1 or epoch % 10 == 0:
                 keep = torch.where(randomization[epoch], Y_aux, ~Y_aux)
