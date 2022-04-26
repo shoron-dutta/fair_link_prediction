@@ -42,6 +42,7 @@ def get_mutual_info(m1, m2, alpha):
 
 
   # g1 and g2 are two normalized kernel matrices of shape [N, N]
+  print(f'shape pf m1: {m1.shape}')
   g1 = get_kernel_mat(m1, m1)
   g2 = get_kernel_mat(m2, m2)
   # normalized_g1 and normalized_g2 are two normalized kernel matrices of shape [N, N]
