@@ -183,7 +183,7 @@ if __name__ == '__main__':
             logit_arr = link_logits.detach().numpy()
             print(f'logit_arr.shape: {logit_arr[:20]}')
             labels_arr = tr_labels.detach().numpy()
-            
+            print(f'{type(Y), type(logit_arr), type(logit_arr.shape), type(Y.shape)}')
             y_padded = torch.zeros(logit_arr.shape)
             y_padded[:Y.shape] = Y
 
