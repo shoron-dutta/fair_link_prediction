@@ -3,9 +3,11 @@ def get_kernel_mat(a, b, r=1, p=2):
   # input: a and b vectors of shape [N]
   # returns kernel matrix K of shape [N, N]
   # kernel operation is: K_{ij} = (dot(x_i, x_j) + r)^p where r=1 and p={2, 4}
-
+  if len(a.shape)==1: # for vectors, compute an outer product
     res = torch.outer(a.T, b)
-    return (res+r)**p
+  else:
+    res = torch.matmul(a,  a.T)
+  return (res+r)**p
 
 def get_normalized_kernel_mat(y):
   # input: kernel matrix of shape [N, N]

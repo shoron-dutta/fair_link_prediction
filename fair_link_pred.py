@@ -109,12 +109,12 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Fair link prediction using regularized mutual information')
     parser.add_argument('--dataset', type=str, default='cora', help='name of the dataset: citeseer, pubmed, cora')
-    parser.add_argument('--num_epochs', type=int, default=2, help='number of epochs')
+    parser.add_argument('--num_epochs', type=int, default=101, help='number of epochs')
     parser.add_argument('--reg_lambda', type=float, default=0.7, help='regularization parameter')
     parser.add_argument('--alpha', type=float, default=0.5, help='alpha parameter for entropy')
     args = parser.parse_args()
 
-    dataset = "cora" #"citeseer" #"cora" "pubmed"
+    dataset = args.dataset
     path = osp.join(osp.dirname(osp.realpath('__file__')), "..", "data", dataset)
     dataset = Planetoid(path, dataset, transform=T.NormalizeFeatures())
 
@@ -135,6 +135,7 @@ if __name__ == '__main__':
         data.train_mask = data.val_mask = data.test_mask = data.y = None
         data = train_test_split_edges(data, val_ratio=0.1, test_ratio=0.2)
         data = data.to(device)
+        print(type(data))
 
         num_classes = len(np.unique(protected_attribute))
         N = data.num_nodes
