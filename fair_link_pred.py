@@ -111,7 +111,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Fair link prediction using regularized mutual information')
     parser.add_argument('--dataset', type=str, default='cora', help='name of the dataset: citeseer, pubmed, cora')
-    parser.add_argument('--num_epochs', type=int, default=101, help='number of epochs')
+    parser.add_argument('--num_epochs', type=int, default=20, help='number of epochs')
     parser.add_argument('--reg_lambda', type=float, default=0.7, help='regularization parameter')
     parser.add_argument('--alpha', type=float, default=0.5, help='alpha parameter for entropy')
     args = parser.parse_args()
@@ -120,10 +120,8 @@ if __name__ == '__main__':
     path = osp.join(osp.dirname(osp.realpath('__file__')), "..", "data", dataset)
     dataset = Planetoid(path, dataset, transform=T.NormalizeFeatures())
 
-    #test_seeds = [0,1,2,3,4,5]
-    test_seeds = [0,1,2]
+    test_seeds = [0,1,2,3,4,5]
     
-    # test_seeds = [0]
     acc_auc = []
     fairness = []
 
