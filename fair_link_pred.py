@@ -179,13 +179,18 @@ if __name__ == '__main__':
             tr_labels = get_link_labels(
                 data.train_pos_edge_index, neg_edges_tr
             ).to(device)
+            
+            sens =torch.empty(data.train_pos_edge_index.shape[1], 2)
+            for i in range(data.train_pos_edge_index.shape[1]):
+                sens[i] = protected_attribute[:i]
+            print(f'sens: {sens.shape}')
 
             print(f'link_logits: {link_logits.shape}')
             
             # mutual info
             logit_arr = link_logits
             labels_arr = tr_labels
-            # print(f'{type(Y), type(logit_arr), logit_arr.shape, Y.shape}')
+            print(f'{type(Y), type(logit_arr)}, logit_arr.shape: {logit_arr.shape}, {Y.shape}')
             y_padded = torch.zeros(logit_arr.shape)
             y_padded[:Y.shape[0]] = Y
             # print(f'type(y_padded): {type(y_padded)}')
