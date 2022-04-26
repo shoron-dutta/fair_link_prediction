@@ -192,7 +192,7 @@ if __name__ == '__main__':
             normalized_kernel_sensitive = get_normalized_kernel_mat(kernel_sensitive)
             
             #print("Computed normalized kernel mat")
-            mutual_info = get_mutual_info(nk1, nk2, alpha)
+            mutual_info = get_mutual_info(normalized_kernel_logits, normalized_kernel_sensitive, alpha)
             #print("Computed mutual info")
 
 
