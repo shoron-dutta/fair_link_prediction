@@ -268,8 +268,11 @@ if __name__ == '__main__':
     print(f'DP (mixed): {dp_mix_per_lambda}')
     print(f'EO (mixed): {eo_mix_per_lambda}')
     
-    fig_name = args.dataset + '_ablation.jpg'
-    plot(acc_per_lambda, 'ACC', dp_mix_per_lambda, 'DP (mixed)', eo_mix_per_lambda, 'EO (mixed)', 'Performance metrics', fig_name)
+    fig_name = args.dataset + '_ablation_dp_eo.jpg'
+    plot2(dp_mix_per_lambda, 'DP (mixed)', eo_mix_per_lambda, 'EO (mixed)', 'Performance metrics', fig_name)
+    
+    fig_name2 = args.dataset + '_ablation_acc.jpg'
+    plot2(acc_per_lambda, 'Accuracy', 'Performance metrics', fig_name2)
     # x = [3,4,5,6,7]
     # y = [10, 3, 34, 21, 12]
     # z = [11, 19, 16, 8, 19]
