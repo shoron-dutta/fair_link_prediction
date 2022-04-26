@@ -183,12 +183,15 @@ if __name__ == '__main__':
             logit_arr = link_logits.detach().numpy()
             print(f'logit_arr.shape: {logit_arr[:20]}')
             labels_arr = tr_labels.detach().numpy()
-            # TODO : take meaningful mutual information
-            k1 = get_kernel_mat(logit_arr, logit_arr)
-            k2 = get_kernel_mat(Y, Y)
+            
+            y_padded = torch.zeros(logit_arr.shape)
+            y_padded[:Y.shape] = Y
+
+            kernel_logits = get_kernel_mat(logit_arr, logit_arr)
+            kernel_sensitive = get_kernel_mat(y_padded, y_padded)
             #print("Computed kernel mat")
-            nk1 = get_normalized_kernel_mat(k1)
-            nk2 = get_normalized_kernel_mat(k2)
+            normalized_kernel_logits = get_normalized_kernel_mat(kernel_logits)
+            normalized_kernel_sensitive = get_normalized_kernel_mat(kernel_sensitive)
             
             #print("Computed normalized kernel mat")
             mutual_info = get_mutual_info(nk1, nk2, alpha)
