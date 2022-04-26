@@ -406,7 +406,6 @@ def  plot(list1, label_list1, list2, label_list2, list3, label_list3, y_label, f
     plt.xlabel('Lambda [regularization hyperparameter]')
     plt.ylabel(y_label)
     plt.legend()
-    plt.set_xbound(0, 1)
     plt.savefig(fig_name)
     # plt.show()
     plt.clf()
