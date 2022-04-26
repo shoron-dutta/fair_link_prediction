@@ -170,21 +170,21 @@ if __name__ == '__main__':
                 num_nodes=N,
                 num_neg_samples=data.train_pos_edge_index.size(1) // 2,
             ).to(device)
-
-            if epoch == 1 or epoch % 10 == 0:
-                keep = torch.where(randomization[epoch], Y_aux, ~Y_aux)
-
+            # print(f'type(data.train_pos_edge_index): {type(data.train_pos_edge_index)}')
+            # print(f'(train_pos_edge_index): {(data.train_pos_edge_index.shape)}, {data.train_pos_edge_index[:15]}')
+            # print(f'data.x: {data.x.shape}, {data.y}')
+            
             model.train()
             optimizer.zero_grad()
 
-            z = model.encode(data.x, data.train_pos_edge_index[:, keep])
+            z = model.encode(data.x, data.train_pos_edge_index)
             link_logits, _ = model.decode(
-                z, data.train_pos_edge_index[:, keep], neg_edges_tr
+                z, data.train_pos_edge_index, neg_edges_tr
             )
             tr_labels = get_link_labels(
-                data.train_pos_edge_index[:, keep], neg_edges_tr
+                data.train_pos_edge_index, neg_edges_tr
             ).to(device)
-
+            
             sens =torch.empty(data.train_pos_edge_index.shape[1], 2)
             for i in range(data.train_pos_edge_index.shape[1]):
                 src, tgt = data.train_pos_edge_index[0][i], data.train_pos_edge_index[1][i]
@@ -197,7 +197,7 @@ if __name__ == '__main__':
                 sens2[i][0], sens2[i][1] = protected_attribute[src], protected_attribute[tgt]
             # print(f'sens2: {sens2.shape}')
             final_vals = torch.cat((sens, sens2), dim=0) # src and tgt class label for all edges, pos followed by neg
-            
+                
             
             # mutual info
             logit_arr = link_logits
