@@ -11,6 +11,7 @@ import torch
 from torch.nn import Sequential, Linear, ReLU
 import torch.nn.functional as F
 from sklearn.metrics import roc_auc_score, accuracy_score
+from entropy import get_kernel_mat, get_normalized_kernel_mat, get_mutual_info
 
 from utils import (
     get_link_labels,
