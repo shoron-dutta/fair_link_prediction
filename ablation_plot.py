@@ -253,5 +253,9 @@ if __name__ == '__main__':
         dp_mix_per_lambda.append(mf[0])
         eo_mix_per_lambda.append(mf[1])
 
+    print(f'Accuracy: {acc_per_lambda}')
+    print(f'DP (mixed): {dp_mix_per_lambda}')
+    print(f'EO (mixed): {eo_mix_per_lambda}')
+    
     fig_name = args.dataset + '_ablation.jpg'
     plot(acc_per_lambda, 'ACC', dp_mix_per_lambda, 'DP (mixed)', eo_mix_per_lambda, 'EO (mixed)', 'Performance metrics', fig_name)
