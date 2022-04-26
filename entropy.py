@@ -15,6 +15,8 @@ def get_normalized_kernel_mat(y):
   r = d.repeat(rows, 1)
   c = d.repeat(cols, 1).T
 
+  return ((y/c)/r)/rows
+
 
 def get_mat_renyi_entropy(g, alpha):
     # returns the matrix based renyi entropy of a normalized kernel matrix g
