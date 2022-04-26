@@ -411,7 +411,7 @@ def  plot2(list2, label_list2, list3, label_list3, y_label, fig_name):
     
 
     fig_name = './figures/' + fig_name
-    x_range = range(1, len(list1)+1)
+    x_range = range(1, len(list2)+1)
     caption = 'Impact of different lambda w.r.t. DP(m), EO(m)'
     
     plt.plot(x_range, list2, 'b', label=label_list2)
