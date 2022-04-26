@@ -21,6 +21,7 @@ def get_mat_renyi_entropy(g, alpha):
   # according to eqn 2
   # g is of shape [N, N]
   # returns scalar
+  print(f'inside get_mat_renyi_entropy: {type(g)} and g: {g}')
   res = torch.log2(torch.trace(g**alpha))
   return res/(1-alpha)
 
