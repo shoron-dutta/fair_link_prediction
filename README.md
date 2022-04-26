@@ -1,7 +1,9 @@
-# fair_link_prediction
+# Fair link Prediction
 **Link prediction experiment on a graph dataset:**  
 
-run fair_link_pred.py  
+```
+python3 fair_link_pred.py
+```
 Arguments:  
   dataset: dataset name; default: "cora"; options = "cora", "citeseer", "pubmed"  
   num_epochs: number of epochs; default = 101  
@@ -11,7 +13,9 @@ Arguments:
 This will run 6 instances of the code (6 different seeds) and report the mean and standard deviation for the metrics.  
 
 **Ablation study for different values of lambda:**  
-run ablation_plot.py  
+```
+python3 ablation_plot.py
+```
 Arguments:  
   dataset: dataset name; default: "cora"; options = "cora", "citeseer", "pubmed"  
   num_epochs: number of epochs; default = 101  
@@ -22,4 +26,4 @@ The code will produce a plot and store it in './figures/' directory.
 
 
 entropy.py: contains code for computes Renyi's alpha order entropy and mutual information  
-utils.py: basic functionality code (mostly from FairDrop)  
+utils.py: basic functionality code (mostly from FairDrop repository)  
