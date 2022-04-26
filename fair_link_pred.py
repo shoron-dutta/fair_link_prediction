@@ -180,6 +180,8 @@ if __name__ == '__main__':
             tr_labels = get_link_labels(
                 data.train_pos_edge_index[:, keep], neg_edges_tr
             ).to(device)
+
+            print(link_logits.shape)
             
             # mutual info
             logit_arr = link_logits
