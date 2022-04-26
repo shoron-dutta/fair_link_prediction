@@ -132,6 +132,7 @@ if __name__ == '__main__':
         np.random.seed(random_seed)
         data = dataset[0]
         protected_attribute = data.y
+        print(f'protected attrib: {protected_attribute.shape}')
         data.train_mask = data.val_mask = data.test_mask = data.y = None
         data = train_test_split_edges(data, val_ratio=0.1, test_ratio=0.2)
         data = data.to(device)
