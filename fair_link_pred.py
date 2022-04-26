@@ -120,7 +120,9 @@ if __name__ == '__main__':
     path = osp.join(osp.dirname(osp.realpath('__file__')), "..", "data", dataset)
     dataset = Planetoid(path, dataset, transform=T.NormalizeFeatures())
 
-    test_seeds = [0,1,2,3,4,5]
+    #test_seeds = [0,1,2,3,4,5]
+    test_seeds = [0,1,2]
+    
     # test_seeds = [0]
     acc_auc = []
     fairness = []
