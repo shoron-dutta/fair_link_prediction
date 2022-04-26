@@ -173,15 +173,15 @@ if __name__ == '__main__':
             model.train()
             optimizer.zero_grad()
 
-            z = model.encode(data.x, data.train_pos_edge_index[:, keep])
+            z = model.encode(data.x, data.train_pos_edge_index)
             link_logits, _ = model.decode(
-                z, data.train_pos_edge_index[:, keep], neg_edges_tr
+                z, data.train_pos_edge_index, neg_edges_tr
             )
             tr_labels = get_link_labels(
-                data.train_pos_edge_index[:, keep], neg_edges_tr
+                data.train_pos_edge_index, neg_edges_tr
             ).to(device)
 
-            print(link_logits.shape)
+            print(f'link_logits: {link_logits.shape}')
             
             # mutual info
             logit_arr = link_logits
