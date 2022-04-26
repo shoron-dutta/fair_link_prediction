@@ -193,6 +193,8 @@ if __name__ == '__main__':
                 src, tgt = neg_edges_tr[0][i], neg_edges_tr[1][i]
                 sens2[i][0], sens2[i][1] = protected_attribute[src], protected_attribute[tgt]
             print(f'sens2: {sens2.shape}')
+            final_vals = torch.cat((sens, sens2), dim=0) # src and tgt class label for all edges, pos followed by neg
+            print(final_vals.shape)
 
             print(f'sum: {sens.shape[0]+sens2.shape[0]}')
 
@@ -209,7 +211,7 @@ if __name__ == '__main__':
             
             # print(f'normalized_kernel_logits: {type(normalized_kernel_logits)}, normalized_kernel_sensitive: {type(normalized_kernel_sensitive)}')
             #print("Computed normalized kernel mat")
-            mutual_info = get_mutual_info(logit_arr, y_padded, alpha)
+            mutual_info = get_mutual_info(logit_arr, final_vals, alpha)
             #print("Computed mutual info")
 
 
