@@ -146,7 +146,7 @@ if __name__ == '__main__':
         
 
         Y = torch.LongTensor(protected_attribute).to(device)
-        print(f'Y.shape: {Y.shape}')
+        print(f'Y.shape: {Y[:20]}')
         Y_aux = (
             Y[data.train_pos_edge_index[0, :]] != Y[data.train_pos_edge_index[1, :]]
         ).to(device)
@@ -181,7 +181,7 @@ if __name__ == '__main__':
             
             # mutual info
             logit_arr = link_logits.detach().numpy()
-            print(f'logit_arr.shape: {logit_arr.shape}')
+            print(f'logit_arr.shape: {logit_arr[:20]}')
             labels_arr = tr_labels.detach().numpy()
             # TODO : take meaningful mutual information
             k1 = get_kernel_mat(logit_arr, logit_arr)
