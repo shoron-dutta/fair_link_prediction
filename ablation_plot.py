@@ -19,7 +19,7 @@ from entropy import get_kernel_mat, get_normalized_kernel_mat, get_mutual_info
 from utils import (
     get_link_labels,
     prediction_fairness,
-    plot1, plot2
+    plot
 )
 
 from torch_geometric.utils import train_test_split_edges
@@ -185,18 +185,19 @@ if __name__ == '__main__':
                 data.train_pos_edge_index, neg_edges_tr
             ).to(device)
             
-            sens =torch.empty(data.train_pos_edge_index.shape[1], 2)
+            # protected attributes of node pairs for each positive edge
+            pos_edge_protected_attr =torch.empty(data.train_pos_edge_index.shape[1], 2)
             for i in range(data.train_pos_edge_index.shape[1]):
                 src, tgt = data.train_pos_edge_index[0][i], data.train_pos_edge_index[1][i]
-                sens[i][0], sens[i][1] = protected_attribute[src], protected_attribute[tgt]
-            # print(f'sens: {sens.shape}')
-
-            sens2 =torch.empty(neg_edges_tr.shape[1], 2)
+                pos_edge_protected_attr[i][0], pos_edge_protected_attr[i][1] = protected_attribute[src], protected_attribute[tgt]
+            
+            # protected attributes of node pairs for each negative edge
+            neg_edge_protected_attr =torch.empty(neg_edges_tr.shape[1], 2)
             for i in range(neg_edges_tr.shape[1]):
                 src, tgt = neg_edges_tr[0][i], neg_edges_tr[1][i]
-                sens2[i][0], sens2[i][1] = protected_attribute[src], protected_attribute[tgt]
-            # print(f'sens2: {sens2.shape}')
-            final_vals = torch.cat((sens, sens2), dim=0) # src and tgt class label for all edges, pos followed by neg
+                neg_edge_protected_attr[i][0], neg_edge_protected_attr[i][1] = protected_attribute[src], protected_attribute[tgt]
+
+            node_pair_protected_attr = torch.cat((pos_edge_protected_attr, neg_edge_protected_attr), dim=0) # src and tgt class label for all edges, pos followed by neg
                 
             
             # mutual info
@@ -268,15 +269,6 @@ if __name__ == '__main__':
     print(f'DP (mixed): {dp_mix_per_lambda}')
     print(f'EO (mixed): {eo_mix_per_lambda}')
     
-    fig_name = args.dataset + '_ablation_dp_eo.jpg'
-    plot2(dp_mix_per_lambda, 'DP (mixed)', eo_mix_per_lambda, 'EO (mixed)', 'Performance metrics', fig_name)
-    
-    fig_name2 = args.dataset + '_ablation_acc.jpg'
-    plot2(acc_per_lambda, 'Accuracy', 'Performance metrics', fig_name2)
-    # x = [3,4,5,6,7]
-    # y = [10, 3, 34, 21, 12]
-    # z = [11, 19, 16, 8, 19]
-    # fig_name2 = args.dataset + '_trial.jpg'
-    
-    # plot(x, 'ACC', y, 'DP (mixed)', z, 'EO (mixed)', 'Performance metrics', fig_name2)
+    fig_name = args.dataset + '_ablation.jpg'
+    plot(acc_per_lambda, 'Accuracy', dp_mix_per_lambda, 'DP (mixed)', eo_mix_per_lambda, 'EO (mixed)', 'Performance metrics', fig_name)
     

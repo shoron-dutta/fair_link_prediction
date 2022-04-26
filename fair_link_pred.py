@@ -169,9 +169,6 @@ if __name__ == '__main__':
                 num_nodes=N,
                 num_neg_samples=data.train_pos_edge_index.size(1) // 2,
             ).to(device)
-            # print(f'type(data.train_pos_edge_index): {type(data.train_pos_edge_index)}')
-            # print(f'(train_pos_edge_index): {(data.train_pos_edge_index.shape)}, {data.train_pos_edge_index[:15]}')
-            # print(f'data.x: {data.x.shape}, {data.y}')
             
             model.train()
             optimizer.zero_grad()
@@ -184,23 +181,20 @@ if __name__ == '__main__':
                 data.train_pos_edge_index, neg_edges_tr
             ).to(device)
             
-            sens =torch.empty(data.train_pos_edge_index.shape[1], 2)
+
+            # protected attributes of node pairs for each positive edge
+            pos_edge_protected_attr =torch.empty(data.train_pos_edge_index.shape[1], 2)
             for i in range(data.train_pos_edge_index.shape[1]):
                 src, tgt = data.train_pos_edge_index[0][i], data.train_pos_edge_index[1][i]
-                sens[i][0], sens[i][1] = protected_attribute[src], protected_attribute[tgt]
-            # print(f'sens: {sens.shape}')
-
-            sens2 =torch.empty(neg_edges_tr.shape[1], 2)
+                pos_edge_protected_attr[i][0], pos_edge_protected_attr[i][1] = protected_attribute[src], protected_attribute[tgt]
+            
+            # protected attributes of node pairs for each negative edge
+            neg_edge_protected_attr =torch.empty(neg_edges_tr.shape[1], 2)
             for i in range(neg_edges_tr.shape[1]):
                 src, tgt = neg_edges_tr[0][i], neg_edges_tr[1][i]
-                sens2[i][0], sens2[i][1] = protected_attribute[src], protected_attribute[tgt]
-            # print(f'sens2: {sens2.shape}')
-            final_vals = torch.cat((sens, sens2), dim=0) # src and tgt class label for all edges, pos followed by neg
-            # print(final_vals.shape)
+                neg_edge_protected_attr[i][0], neg_edge_protected_attr[i][1] = protected_attribute[src], protected_attribute[tgt]
 
-            # print(f'sum: {sens.shape[0]+sens2.shape[0]}')
-
-            # print(f'link_logits: {link_logits.shape}')
+            node_pair_protected_attr = torch.cat((pos_edge_protected_attr, neg_edge_protected_attr), dim=0) # src and tgt class label for all edges, pos followed by neg
             
             # mutual info
             logit_arr = link_logits
@@ -209,7 +203,7 @@ if __name__ == '__main__':
             
             # print(f'normalized_kernel_logits: {type(normalized_kernel_logits)}, normalized_kernel_sensitive: {type(normalized_kernel_sensitive)}')
             #print("Computed normalized kernel mat")
-            mutual_info = get_mutual_info(logit_arr, final_vals, alpha)
+            mutual_info = get_mutual_info(logit_arr, node_pair_protected_attr, alpha)
             #print("Computed mutual info")
 
 
