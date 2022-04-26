@@ -32,10 +32,10 @@ def fair_metrics(gt, y, group):
 
 def get_link_labels(pos_edge_index, neg_edge_index):
     E = pos_edge_index.size(1) + neg_edge_index.size(1)
-    print(f"E: {E}")
+    #print(f"E: {E}")
     link_labels = torch.zeros(E, dtype=torch.float)
     link_labels[: pos_edge_index.size(1)] = 1.0
-    print(f"link lab: {link_labels}")
+    #print(f"link lab: {link_labels}")
     return link_labels
 
 def prediction_fairness(test_edge_idx, test_edge_labels, te_y, group):
@@ -134,7 +134,7 @@ if __name__ == '__main__':
         np.random.seed(random_seed)
         data = dataset[0]
         protected_attribute = data.y
-        print(f'protected attrib: {protected_attribute.shape}')
+        #print(f'protected attrib: {protected_attribute.shape}')
         data.train_mask = data.val_mask = data.test_mask = data.y = None
         data = train_test_split_edges(data, val_ratio=0.1, test_ratio=0.2)
         data = data.to(device)
@@ -167,9 +167,9 @@ if __name__ == '__main__':
                 num_nodes=N,
                 num_neg_samples=data.train_pos_edge_index.size(1) // 2,
             ).to(device)
-            print(f'type(data.train_pos_edge_index): {type(data.train_pos_edge_index)}')
-            print(f'(train_pos_edge_index): {(data.train_pos_edge_index.shape)}, {data.train_pos_edge_index[:15]}')
-            print(f'data.x: {data.x.shape}, {data.y}')
+            # print(f'type(data.train_pos_edge_index): {type(data.train_pos_edge_index)}')
+            # print(f'(train_pos_edge_index): {(data.train_pos_edge_index.shape)}, {data.train_pos_edge_index[:15]}')
+            # print(f'data.x: {data.x.shape}, {data.y}')
             
             model.train()
             optimizer.zero_grad()
@@ -186,24 +186,24 @@ if __name__ == '__main__':
             for i in range(data.train_pos_edge_index.shape[1]):
                 src, tgt = data.train_pos_edge_index[0][i], data.train_pos_edge_index[1][i]
                 sens[i][0], sens[i][1] = protected_attribute[src], protected_attribute[tgt]
-            print(f'sens: {sens.shape}')
+            # print(f'sens: {sens.shape}')
 
             sens2 =torch.empty(neg_edges_tr.shape[1], 2)
             for i in range(neg_edges_tr.shape[1]):
                 src, tgt = neg_edges_tr[0][i], neg_edges_tr[1][i]
                 sens2[i][0], sens2[i][1] = protected_attribute[src], protected_attribute[tgt]
-            print(f'sens2: {sens2.shape}')
+            # print(f'sens2: {sens2.shape}')
             final_vals = torch.cat((sens, sens2), dim=0) # src and tgt class label for all edges, pos followed by neg
-            print(final_vals.shape)
+            # print(final_vals.shape)
 
-            print(f'sum: {sens.shape[0]+sens2.shape[0]}')
+            # print(f'sum: {sens.shape[0]+sens2.shape[0]}')
 
-            print(f'link_logits: {link_logits.shape}')
+            # print(f'link_logits: {link_logits.shape}')
             
             # mutual info
             logit_arr = link_logits
             labels_arr = tr_labels
-            print(f'{type(Y), type(logit_arr)}, logit_arr.shape: {logit_arr.shape}, {Y.shape}, {tr_labels.shape}')
+            # print(f'{type(Y), type(logit_arr)}, logit_arr.shape: {logit_arr.shape}, {Y.shape}, {tr_labels.shape}')
             y_padded = torch.zeros(logit_arr.shape)
             y_padded[:Y.shape[0]] = Y
             # print(f'type(y_padded): {type(y_padded)}')
