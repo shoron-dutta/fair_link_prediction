@@ -146,7 +146,6 @@ if __name__ == '__main__':
         
 
         Y = torch.LongTensor(protected_attribute).to(device)
-        print(f'Y.shape: {Y[:20]}')
         Y_aux = (
             Y[data.train_pos_edge_index[0, :]] != Y[data.train_pos_edge_index[1, :]]
         ).to(device)
@@ -180,9 +179,8 @@ if __name__ == '__main__':
             ).to(device)
             
             # mutual info
-            logit_arr = link_logits.detach().numpy()
-            print(f'logit_arr.shape: {logit_arr[:20]}')
-            labels_arr = tr_labels.detach().numpy()
+            logit_arr = link_logits
+            labels_arr = tr_labels
             print(f'{type(Y), type(logit_arr), type(logit_arr.shape), type(Y.shape)}')
             y_padded = torch.zeros(logit_arr.shape)
             y_padded[:Y.shape] = Y
