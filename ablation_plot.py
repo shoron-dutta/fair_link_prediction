@@ -266,5 +266,5 @@ if __name__ == '__main__':
     print(f'EO (mixed): {eo_mix_per_lambda}')
     
     fig_name = args.dataset + '_ablation.jpg'
-    plot(acc_per_lambda, 'Accuracy', dp_mix_per_lambda, 'DP (mixed)', eo_mix_per_lambda, 'EO (mixed)', 'Performance metrics', fig_name)
+    plot(reg_lambda_set, acc_per_lambda, 'Accuracy', dp_mix_per_lambda, 'DP (mixed)', eo_mix_per_lambda, 'EO (mixed)', 'Performance metrics', fig_name)
     

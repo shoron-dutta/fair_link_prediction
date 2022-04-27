@@ -393,9 +393,8 @@ def link_fairness(
     return fair_dict
 
 
-def  plot(list1, label_list1, list2, label_list2, list3, label_list3, y_label, fig_name):
+def  plot(values, list1, label_list1, list2, label_list2, list3, label_list3, y_label, fig_name):
     
-
     fig_name = './figures/' + fig_name
     x_range = range(1, len(list2)+1)
     caption = 'Impact of different lambda w.r.t. ACC, DP(m), EO(m)'
@@ -405,6 +404,7 @@ def  plot(list1, label_list1, list2, label_list2, list3, label_list3, y_label, f
     plt.title(caption)
     plt.xlabel('Lambda [regularization hyperparameter]')
     plt.ylabel(y_label)
+    plt.xticks(list1,values)
     plt.legend()
     plt.savefig(fig_name)
     # plt.show()
