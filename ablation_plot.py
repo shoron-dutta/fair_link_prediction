@@ -200,16 +200,12 @@ if __name__ == '__main__':
             node_pair_protected_attr = torch.cat((pos_edge_protected_attr, neg_edge_protected_attr), dim=0) # src and tgt class label for all edges, pos followed by neg
                 
             
-            # mutual info
+            
             logit_arr = link_logits
             labels_arr = tr_labels
-        
-            
-            
-            # print(f'normalized_kernel_logits: {type(normalized_kernel_logits)}, normalized_kernel_sensitive: {type(normalized_kernel_sensitive)}')
-            #print("Computed normalized kernel mat")
-            mutual_info = get_mutual_info(logit_arr, final_vals, alpha)
-            #print("Computed mutual info")
+
+            # mutual info
+            mutual_info = get_mutual_info(logit_arr, node_pair_protected_attr, alpha)
 
 
             loss = F.binary_cross_entropy_with_logits(link_logits, tr_labels) + reg_lambda * mutual_info
