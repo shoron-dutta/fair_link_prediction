@@ -162,7 +162,7 @@ if __name__ == '__main__':
         
         
         best_val_perf = test_perf = 0
-        for epoch in tqdm(range(1, epochs)):
+        for epoch in tqdm(range(1, epochs+1)):
             
             # TRAINING    
             neg_edges_tr = negative_sampling(
