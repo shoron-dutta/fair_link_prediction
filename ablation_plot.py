@@ -113,7 +113,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Fair link prediction using regularized mutual information')
     parser.add_argument('--dataset', type=str, default='cora', help='name of the dataset: citeseer, pubmed, cora')
-    parser.add_argument('--num_epochs', type=int, default=2, help='number of epochs')
+    parser.add_argument('--num_epochs', type=int, default=25, help='number of epochs')
     parser.add_argument('--alpha', type=float, default=0.5, help='alpha parameter for entropy')
     args = parser.parse_args()
 
@@ -129,8 +129,6 @@ if __name__ == '__main__':
     acc_auc = []
     fairness = []
 
-
-    delta = 0.16 # when set to 0, it applies no fairness constraint
     alpha = args.alpha
     reg_lambda_set = [0, 0.2, 0.4, 0.6, 0.8, 1]
     for reg_lambda in reg_lambda_set:
@@ -153,12 +151,6 @@ if __name__ == '__main__':
         
 
         Y = torch.LongTensor(protected_attribute).to(device)
-        Y_aux = (
-            Y[data.train_pos_edge_index[0, :]] != Y[data.train_pos_edge_index[1, :]]
-        ).to(device)
-        randomization = (
-            torch.FloatTensor(epochs, Y_aux.size(0)).uniform_() < 0.5 + delta
-        ).to(device)
         
         
         best_val_perf = test_perf = 0
@@ -170,9 +162,7 @@ if __name__ == '__main__':
                 num_nodes=N,
                 num_neg_samples=data.train_pos_edge_index.size(1) // 2,
             ).to(device)
-            # print(f'type(data.train_pos_edge_index): {type(data.train_pos_edge_index)}')
-            # print(f'(train_pos_edge_index): {(data.train_pos_edge_index.shape)}, {data.train_pos_edge_index[:15]}')
-            # print(f'data.x: {data.x.shape}, {data.y}')
+            
             
             model.train()
             optimizer.zero_grad()
@@ -204,7 +194,7 @@ if __name__ == '__main__':
             logit_arr = link_logits
             labels_arr = tr_labels
 
-            # mutual info
+            # mutual info between the logit and the protected attribute of respective node pair
             mutual_info = get_mutual_info(logit_arr, node_pair_protected_attr, alpha)
 
 
@@ -253,7 +243,7 @@ if __name__ == '__main__':
         fairness.append([x * 100 for x in f])
 
 
-        # since, we're using only one seed, mean is unnecessary but harmless, change later
+        # since, we're using only one seed in ablation study, mean is unnecessary but harmless, change later
         ma = np.mean(np.asarray(acc_auc), axis=0)
         mf = np.mean(np.asarray(fairness), axis=0)
 

@@ -396,15 +396,13 @@ def link_fairness(
 def  plot(values, list1, label_list1, list2, label_list2, list3, label_list3, y_label, fig_name):
     
     fig_name = './figures/' + fig_name
-    x_range = values #range(1, len(list2)+1)
     caption = 'Impact of different lambda w.r.t. ACC, DP(m), EO(m)'
-    plt.plot(x_range, list1, 'g', label=label_list1)
-    plt.plot(x_range, list2, 'b', label=label_list2)
-    plt.plot(x_range, list3, 'r', label=label_list3)
+    plt.plot(values, list1, 'g', label=label_list1)
+    plt.plot(values, list2, 'b', label=label_list2)
+    plt.plot(values, list3, 'r', label=label_list3)
     plt.title(caption)
     plt.xlabel('Lambda [regularization hyperparameter]')
     plt.ylabel(y_label)
     plt.legend()
     plt.savefig(fig_name)
-    # plt.show()
     plt.clf()

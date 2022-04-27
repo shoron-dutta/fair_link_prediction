@@ -125,8 +125,6 @@ if __name__ == '__main__':
     acc_auc = []
     fairness = []
 
-
-    delta = 0.16 # when set to 0, it applies no fairness constraint
     alpha = args.alpha
     reg_lambda = args.reg_lambda
     for random_seed in test_seeds:
@@ -134,11 +132,9 @@ if __name__ == '__main__':
         np.random.seed(random_seed)
         data = dataset[0]
         protected_attribute = data.y
-        #print(f'protected attrib: {protected_attribute.shape}')
         data.train_mask = data.val_mask = data.test_mask = data.y = None
         data = train_test_split_edges(data, val_ratio=0.1, test_ratio=0.2)
         data = data.to(device)
-        #print(type(data))
 
         num_classes = len(np.unique(protected_attribute))
         N = data.num_nodes
@@ -150,12 +146,6 @@ if __name__ == '__main__':
         
 
         Y = torch.LongTensor(protected_attribute).to(device)
-        Y_aux = (
-            Y[data.train_pos_edge_index[0, :]] != Y[data.train_pos_edge_index[1, :]]
-        ).to(device)
-        randomization = (
-            torch.FloatTensor(epochs, Y_aux.size(0)).uniform_() < 0.5 + delta
-        ).to(device)
         
         
         best_val_perf = test_perf = 0
@@ -194,16 +184,13 @@ if __name__ == '__main__':
 
             node_pair_protected_attr = torch.cat((pos_edge_protected_attr, neg_edge_protected_attr), dim=0) # src and tgt class label for all edges, pos followed by neg
             
-            # mutual info
+            # mutual info between the logit and the protected attribute of respective node pair
             logit_arr = link_logits
             labels_arr = tr_labels
             
             
-            # print(f'normalized_kernel_logits: {type(normalized_kernel_logits)}, normalized_kernel_sensitive: {type(normalized_kernel_sensitive)}')
-            #print("Computed normalized kernel mat")
             mutual_info = get_mutual_info(logit_arr, node_pair_protected_attr, alpha)
-            #print("Computed mutual info")
-
+            
 
             loss = F.binary_cross_entropy_with_logits(link_logits, tr_labels) + reg_lambda * mutual_info
             loss.backward()
