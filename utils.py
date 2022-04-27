@@ -404,7 +404,6 @@ def  plot(values, list1, label_list1, list2, label_list2, list3, label_list3, y_
     plt.title(caption)
     plt.xlabel('Lambda [regularization hyperparameter]')
     plt.ylabel(y_label)
-    plt.xticks(list1,values)
     plt.legend()
     plt.savefig(fig_name)
     # plt.show()
